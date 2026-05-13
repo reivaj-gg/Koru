@@ -42,7 +42,12 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
-            implementation(libs.sqldelight.sqlite)
+            implementation(libs.kotlinx.coroutines.test)
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation(libs.sqldelight.sqlite)
+            }
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
