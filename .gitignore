@@ -1,0 +1,31 @@
+*.iml
+.kotlin
+.gradle
+**/build/
+xcuserdata
+!src/**/build/
+local.properties
+.idea
+.DS_Store
+captures
+.externalNativeBuild
+.cxx
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+node_modules/
+
+# Secrets — never commit API keys
+.env
+*.env.local
+google-services.json
+GoogleService-Info.plist
+
+# Agent memory — local only, not for the repo
+.atl/
+
+# SQLDelight generated code — rebuilt on build
+**/sqldelight/
