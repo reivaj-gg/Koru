@@ -1,35 +1,78 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Koru
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+**Koru** is the sample application for the **Kotlin Foundation Kotlin Multiplatform Contest** starter kit: a metacognitive “inner world” journal where you capture **traces** (how you interpreted events), and on-device history plus AI help surface patterns over time.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+The name *Koru* refers to the Māori symbol of an unfurling fern — growth and new beginnings.
 
-### Build and Run Android Application
+## Current status
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+This repository starts from the **JetBrains Compose Multiplatform wizard** template (`org.example.project`). The **product scope, architecture, and stack** are defined in:
 
-### Build and Run iOS Application
+| Document | Purpose |
+|---|---|
+| [`PRD.md`](./PRD.md) | Product requirements and MVP acceptance criteria (source of truth for implementation) |
+| [`AGENTS.md`](./AGENTS.md) | AI and human contributor rules — SDD workflow, Clean Architecture + MVI, stack constraints |
+| [`koru-ideaSummary.md`](./koru-ideaSummary.md) | Ideation narrative and resolved product questions |
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+Implementation of Koru (SQLDelight, Ktor + Gemini, tree Canvas, notifications, etc.) is **in progress** relative to those documents.
+
+## Requirements
+
+- **JDK 17+** (Gradle / AGP 9; module JVM target is 11)
+- **Android Studio** or IntelliJ with KMP plugins for Android development
+- **macOS + Xcode** for running the iOS app and `iosSimulatorArm64` tests
+
+## Build and run — Android
+
+From the repository root:
+
+**macOS / Linux**
+
+```bash
+./gradlew :composeApp:assembleDebug
+./gradlew :composeApp:installDebug
+```
+
+**Windows**
+
+```powershell
+.\gradlew.bat :composeApp:assembleDebug
+.\gradlew.bat :composeApp:installDebug
+```
+
+Run configurations are also available from the IDE toolbar.
+
+## Build and run — iOS
+
+Open the [`iosApp`](./iosApp) directory in **Xcode** and run the app on a simulator or device. Shared Kotlin UI lives in `composeApp`; the iOS target hosts the Compose embedding entry point.
+
+## Tests
+
+```bash
+./gradlew :composeApp:testDebugUnitTest
+./gradlew :composeApp:allTests
+```
+
+On **macOS** with Xcode installed:
+
+```bash
+./gradlew :composeApp:iosSimulatorArm64Test
+```
+
+Continuous Integration (Android assemble + unit tests) runs on **GitHub Actions** — see [`.github/workflows/ci.yml`](./.github/workflows/ci.yml).
+
+## Secrets and API keys
+
+Do **not** commit Gemini or other API keys. Use a local `.env` or `local.properties` entry that is **gitignored** — see `PRD.md` risks and `.gitignore`.
+
+## License
+
+This project is licensed under the **MIT License** — see [`LICENSE`](./LICENSE).
+
+## Contributing
+
+Use **issues and small pull requests** as described in `AGENTS.md` (section **GitHub & professional collaboration**). A PR template is provided under `.github/pull_request_template.md`.
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+*Kotlin Multiplatform Contest Starter Kit · Kotlin Foundation · 2026*

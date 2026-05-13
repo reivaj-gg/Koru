@@ -27,5 +27,5 @@ GoogleService-Info.plist
 # Agent memory — local only, not for the repo
 .atl/
 
-# SQLDelight generated code — rebuilt on build
-**/sqldelight/
+# SQLDelight / other generated outputs live under **/build/ (already ignored).
+# Do not ignore **/sqldelight/** — that would exclude source `.sq` schemas under `src/.../sqldelight/`.
