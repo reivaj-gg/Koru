@@ -29,7 +29,7 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # Ejecuta el linter (si tienes ktlint/detekt) y las pruebas unitarias de commonMain y Android
+      # Runs the linter (ktlint/detekt) and unit tests for commonMain and Android
       - name: Run Checks and Unit Tests
         run: ./gradlew :composeApp:check --no-daemon --stacktrace
 
@@ -38,7 +38,7 @@ jobs:
 
   ios:
     name: Build & Test (iOS)
-    # macos-14 usa la arquitectura Apple Silicon (M1/M2), ideal para compilar KMP rápido
+    # macos-14 uses Apple Silicon (M1/M2) architecture, ideal for fast KMP compilation
     runs-on: macos-14 
     timeout-minutes: 60
 
@@ -55,6 +55,26 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # Verifica que el código de commonMain y iosMain compile y pase las pruebas en el simulador de iOS
+      # Verifies that commonMain and iosMain code compiles and passes tests on iOS Simulator
       - name: Run iOS Simulator Tests
         run: ./gradlew :composeApp:iosSimulatorArm64Test --no-daemon --stacktrace
+
+  gga-validation:
+    name: AI Guardian Angel (GGA)
+    runs-on: ubuntu-latest
+    needs: [android, ios] # Only runs if tests pass
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+      
+      - name: Setup Go (For GGA)
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+
+      - name: Run Gentleman Guardian Angel
+        run: |
+          go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
+          gentle-ai gga --ci
