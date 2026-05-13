@@ -1,0 +1,36 @@
+# CI for Koru — Kotlin Multiplatform Contest Starter Kit
+# Runs on every push and pull request to main (see AGENTS.md §15).
+# Android assemble + unit tests on Ubuntu. iOS simulator tests require macOS (run locally or extend this workflow).
+
+name: CI
+
+on:
+    push:
+        branches: [main, master]
+    pull_request:
+        branches: [main, master]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    android:
+        runs-on: ubuntu-latest
+        timeout-minutes: 45
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Set up JDK
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: 17
+
+            - name: Set up Gradle
+              uses: gradle/actions/setup-gradle@v4
+
+            - name: Assemble Android debug and run JVM/Android unit tests
+              run: ./gradlew :composeApp:assembleDebug :composeApp:testDebugUnitTest --no-daemon --stacktrace
