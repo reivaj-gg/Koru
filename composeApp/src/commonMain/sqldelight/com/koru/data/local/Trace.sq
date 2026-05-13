@@ -1,0 +1,51 @@
+import com.koru.domain.model.EmotionTag;
+
+CREATE TABLE TraceEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    content TEXT NOT NULL,
+    context TEXT,
+    capturedAt INTEGER NOT NULL,
+    emotionTag TEXT AS EmotionTag
+);
+
+-- FTS5 Virtual Table for offline-first semantic search
+CREATE VIRTUAL TABLE TraceFtsEntity USING fts5(
+    id UNINDEXED,
+    content,
+    context,
+    tokenize="unicode61"
+);
+
+-- Triggers to keep FTS in sync
+CREATE TRIGGER trace_ai AFTER INSERT ON TraceEntity BEGIN
+  INSERT INTO TraceFtsEntity(id, content, context)
+  VALUES (new.id, new.content, new.context);
+END;
+
+CREATE TRIGGER trace_ad AFTER DELETE ON TraceEntity BEGIN
+  INSERT INTO TraceFtsEntity(TraceFtsEntity, id, content, context)
+  VALUES ('delete', old.id, old.content, old.context);
+END;
+
+CREATE TRIGGER trace_au AFTER UPDATE ON TraceEntity BEGIN
+  INSERT INTO TraceFtsEntity(TraceFtsEntity, id, content, context)
+  VALUES ('delete', old.id, old.content, old.context);
+  INSERT INTO TraceFtsEntity(id, content, context)
+  VALUES (new.id, new.content, new.context);
+END;
+
+insertTrace:
+INSERT OR REPLACE INTO TraceEntity(id, content, context, capturedAt, emotionTag)
+VALUES (?, ?, ?, ?, ?);
+
+observeAll:
+SELECT * FROM TraceEntity
+ORDER BY capturedAt DESC;
+
+searchFts:
+SELECT TraceEntity.*
+FROM TraceEntity
+JOIN TraceFtsEntity ON TraceEntity.id = TraceFtsEntity.id
+WHERE TraceFtsEntity MATCH :query
+ORDER BY TraceEntity.capturedAt DESC
+LIMIT :limit;
