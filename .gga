@@ -1,0 +1,27 @@
+# Gentleman Guardian Angel Configuration
+# https://github.com/Gentleman-Programming/gentleman-guardian-angel
+
+# AI Provider (required)
+# Aligned with Koru Project Stack
+PROVIDER="gemini"
+
+# File patterns to include in review
+# Targets Kotlin Multiplatform source files
+FILE_PATTERNS="*.kt,*.kts"
+
+# File patterns to exclude from review
+# Excludes build artifacts and test files from the main review pass
+EXCLUDE_PATTERNS="*Test.kt,*Spec.kt,build/*,BuildKonfig.kt"
+
+# File containing code review rules
+# This is our Single Source of Truth for architecture and standards
+RULES_FILE="AGENTS.md"
+
+# Strict mode: fail if AI response is ambiguous
+STRICT_MODE="true"
+
+# Timeout in seconds for AI provider response
+TIMEOUT="300"
+
+# Base branch for --pr-mode (auto-detects main/master/develop if empty)
+PR_BASE_BRANCH="main"

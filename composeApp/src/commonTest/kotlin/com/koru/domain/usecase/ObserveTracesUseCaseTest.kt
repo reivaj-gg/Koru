@@ -5,7 +5,7 @@ import com.koru.domain.model.Trace
 import com.koru.domain.repository.FakeTraceRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -15,13 +15,13 @@ class ObserveTracesUseCaseTest {
     private val observeTracesUseCase = ObserveTracesUseCase(repository)
 
     @Test
-    fun `given no traces, when invoked, then emits empty list`() = runTest {
+    fun `given no traces when invoked then emits empty list`() = runTest {
         val traces = observeTracesUseCase().first()
         assertEquals(0, traces.size)
     }
 
     @Test
-    fun `given saved traces, when invoked, then emits all traces`() = runTest {
+    fun `given saved traces when invoked then emits all traces`() = runTest {
         val trace1 = Trace(
             id = "t1",
             content = "First trace",

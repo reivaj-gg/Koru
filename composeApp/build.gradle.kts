@@ -51,6 +51,7 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

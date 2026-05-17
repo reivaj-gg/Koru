@@ -69,12 +69,12 @@ jobs:
         with:
           fetch-depth: 0 
       
-      - name: Setup Go (For GGA)
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.24'
+      - name: Instalar ecosistema Gentle AI
+        run: curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
 
-      - name: Run Gentleman Guardian Angel
+      - name: Ejecutar Gentleman Guardian Angel
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest
-          gentle-ai gga --ci
+          export PATH="$HOME/.local/bin:$PATH"
+          gga run --ci

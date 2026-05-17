@@ -1,9 +1,11 @@
+@file:OptIn(kotlin.time.ExperimentalTime::class)
+
 package com.koru.domain.usecase
 
 import com.koru.domain.model.EmotionTag
 import com.koru.domain.model.Trace
 import com.koru.domain.repository.TraceRepository
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 
 /**
  * Validates and persists a new [Trace] to the local store.
@@ -42,17 +44,31 @@ class SaveTraceUseCase(
             )
         }
 
+        val now = Clock.System.now()
+
         val trace = Trace(
-            id = generateId(),
+            id = generateId(now.toEpochMilliseconds()),
             content = content.trim(),
             context = context?.trim()?.takeIf { it.isNotBlank() },
-            capturedAt = Clock.System.now(),
+            capturedAt = now,
             emotionTag = emotionTag,
         )
 
         return repository.save(trace)
     }
 
-    private fun generateId(): String =
-        "trace-${Clock.System.now().toEpochMilliseconds()}-${(1..6).map { ('a'..'z').random() }.joinToString("")}"
+    /**
+     * Generates a unique identifier for a new trace.
+     *
+     * Format: `trace-{timestamp}-{random_suffix}`
+     * The random suffix ensures uniqueness even if multiple traces are captured
+     * within the same millisecond (e.g., during a fast sync or batch import).
+     *
+     * @param nowMillis The current epoch timestamp.
+     * @return A unique string ID.
+     */
+    private fun generateId(nowMillis: Long): String {
+        val randomSuffix = (1..6).map { ('a'..'z').random() }.joinToString("")
+        return "trace-$nowMillis-$randomSuffix"
+    }
 }
