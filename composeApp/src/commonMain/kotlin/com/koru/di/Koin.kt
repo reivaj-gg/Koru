@@ -39,7 +39,16 @@ val dataModule = module {
     // Requires DatabaseDriverFactory to be provided by the platform module
     single<KoruDatabase> {
         val driverFactory = get<DatabaseDriverFactory>()
-        KoruDatabase(driverFactory.createDriver())
+        val emotionTagAdapter = object : app.cash.sqldelight.ColumnAdapter<com.koru.domain.model.EmotionTag, String> {
+            override fun decode(databaseValue: String): com.koru.domain.model.EmotionTag = com.koru.domain.model.EmotionTag.valueOf(databaseValue)
+            override fun encode(value: com.koru.domain.model.EmotionTag): String = value.name
+        }
+        KoruDatabase(
+            driver = driverFactory.createDriver(),
+            TraceEntityAdapter = com.koru.data.local.TraceEntity.Adapter(
+                emotionTagAdapter = emotionTagAdapter
+            )
+        )
     }
     
     single<TraceRepository> { TraceRepositoryImpl(get()) }

@@ -74,6 +74,14 @@ jobs:
         with:
           go-version: '1.24'
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Gemini CLI
+        run: npm install -g @anthropic-ai/gemini-cli
+
       - name: Run Gentleman Guardian Angel
         run: |
           go install github.com/gentleman-programming/gentle-ai/cmd/gentle-ai@latest

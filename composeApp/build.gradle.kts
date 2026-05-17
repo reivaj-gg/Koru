@@ -55,6 +55,17 @@ kotlin {
         }
         iosMain.dependencies {
             implementation(libs.sqldelight.native)
+            implementation(libs.kotlinx.datetime)
+        }
+        val iosSimulatorArm64Main by getting {
+            dependencies {
+                implementation(libs.kotlinx.datetime)
+            }
+        }
+        val iosArm64Main by getting {
+            dependencies {
+                implementation(libs.kotlinx.datetime)
+            }
         }
     }
 }

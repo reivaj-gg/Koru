@@ -39,7 +39,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `given OpenCapture intent, when dispatched, then isCapturing becomes true`() = runTest {
+    fun `given OpenCapture intent when dispatched then isCapturing becomes true`() = runTest {
         viewModel.state.test {
             // Initial state
             assertFalse(awaitItem().isCapturing)
@@ -53,7 +53,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `given CloseCapture intent, when dispatched, then isCapturing becomes false`() = runTest {
+    fun `given CloseCapture intent when dispatched then isCapturing becomes false`() = runTest {
         viewModel.dispatch(HomeIntent.OpenCapture)
         viewModel.state.test {
             assertTrue(awaitItem().isCapturing)
@@ -65,7 +65,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `given valid content, when SaveTrace dispatched, then TraceSaved effect emits and isCapturing becomes false`() = runTest {
+    fun `given valid content when SaveTrace dispatched then TraceSaved effect emits and isCapturing becomes false`() = runTest {
         // Prepare to capture state first to ensure capturing is open
         viewModel.dispatch(HomeIntent.OpenCapture)
         

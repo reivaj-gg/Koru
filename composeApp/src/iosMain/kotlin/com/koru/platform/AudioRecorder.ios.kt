@@ -9,6 +9,7 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
+import com.koru.platform.getCurrentInstant
 
 /**
  * iOS implementation of [AudioRecorder].
@@ -41,8 +42,7 @@ actual class AudioRecorder actual constructor() {
                 create = true,
                 error = null
             )
-            
-            val fileName = "koru_record_${platform.Foundation.NSDate().timeIntervalSince1970}.m4a"
+            val fileName = "koru_record_${getCurrentInstant().toEpochMilliseconds()}.m4a"
             val fileUrl = documentDirectory?.URLByAppendingPathComponent(fileName) ?: return false
             currentFilePath = fileUrl.path
 

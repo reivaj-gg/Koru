@@ -3,7 +3,8 @@ package com.koru.domain.usecase
 import com.koru.domain.model.EmotionTag
 import com.koru.domain.model.Trace
 import com.koru.domain.repository.TraceRepository
-import kotlinx.datetime.Clock
+
+import com.koru.platform.getCurrentInstant
 
 /**
  * Validates and persists a new [Trace] to the local store.
@@ -46,7 +47,7 @@ class SaveTraceUseCase(
             id = generateId(),
             content = content.trim(),
             context = context?.trim()?.takeIf { it.isNotBlank() },
-            capturedAt = Clock.System.now(),
+            capturedAt = getCurrentInstant(),
             emotionTag = emotionTag,
         )
 
@@ -54,5 +55,5 @@ class SaveTraceUseCase(
     }
 
     private fun generateId(): String =
-        "trace-${Clock.System.now().toEpochMilliseconds()}-${(1..6).map { ('a'..'z').random() }.joinToString("")}"
+        "trace-${getCurrentInstant().toEpochMilliseconds()}-${(1..6).map { ('a'..'z').random() }.joinToString("")}"
 }

@@ -15,7 +15,7 @@ class SaveTraceUseCaseTest {
     private val saveTraceUseCase = SaveTraceUseCase(repository)
 
     @Test
-    fun `given valid content, when invoked, then trace is saved and result is success`() = runTest {
+    fun `given valid content when invoked then trace is saved and result is success`() = runTest {
         val result = saveTraceUseCase(
             content = "This is a meaningful trace",
             context = null,
@@ -33,7 +33,7 @@ class SaveTraceUseCaseTest {
     }
 
     @Test
-    fun `given blank content, when invoked, then returns failure`() = runTest {
+    fun `given blank content when invoked then returns failure`() = runTest {
         val result = saveTraceUseCase(
             content = "   ",
             context = null,
