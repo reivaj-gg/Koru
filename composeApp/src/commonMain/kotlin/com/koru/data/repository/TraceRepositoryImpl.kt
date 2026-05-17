@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.time.ExperimentalTime::class)
+
 package com.koru.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
@@ -9,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * SQLDelight-backed implementation of [TraceRepository].
@@ -24,6 +26,9 @@ class TraceRepositoryImpl(
     private val database: KoruDatabase,
 ) : TraceRepository {
 
+    /**
+     * Generated SQLDelight queries for the Trace table.
+     */
     private val queries = database.traceQueries
 
     override fun observeAll(): Flow<List<Trace>> {

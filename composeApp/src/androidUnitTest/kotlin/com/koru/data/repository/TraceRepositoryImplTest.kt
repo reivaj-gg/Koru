@@ -8,7 +8,7 @@ import com.koru.domain.model.EmotionTag
 import com.koru.domain.model.Trace
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
