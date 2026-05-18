@@ -62,19 +62,26 @@ jobs:
   gga-validation:
     name: AI Guardian Angel (GGA)
     runs-on: ubuntu-latest
-    needs: [android, ios] # Only runs if tests pass
+    needs: [ android, ios ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
-      
-      - name: Instalar ecosistema Gentle AI
+          fetch-depth: 0
+
+      - name: Instalar GGA
         run: |
-          curl -fsSL https://raw.githubusercontent.com/Gentleman-Programming/gentle-ai/main/scripts/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          git clone https://github.com/Gentleman-Programming/gentleman-guardian-angel.git /tmp/gga
+          cd /tmp/gga
+          bash install.sh
+          echo "$HOME/bin" >> $GITHUB_PATH
+          npm install -g @google/gemini-cli
+          echo "$(npm root -g)/../bin" >> $GITHUB_PATH
 
       - name: Ejecutar Gentleman Guardian Angel
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: gga run --ci
+
+
+
