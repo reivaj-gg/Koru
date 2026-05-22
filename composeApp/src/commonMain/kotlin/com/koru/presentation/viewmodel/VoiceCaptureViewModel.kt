@@ -196,9 +196,8 @@ class VoiceCaptureViewModel(
             return
         }
 
+        _state.update { it.copy(isSaving = true) }
         viewModelScope.launch {
-            _state.update { it.copy(isSaving = true) }
-
             saveTraceUseCase(content = text)
                 .onSuccess {
                     _state.update { VoiceCaptureUiState() }

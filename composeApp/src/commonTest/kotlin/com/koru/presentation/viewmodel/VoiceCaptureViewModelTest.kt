@@ -168,12 +168,15 @@ class VoiceCaptureViewModelTest {
         runTest {
             val (vm, repo) = buildViewModel()
 
-            vm.handleIntent(VoiceIntent.SaveTranscription("First valid trace to save"))
-            // Second intent fired before first completes — should be ignored
-            vm.handleIntent(VoiceIntent.SaveTranscription("Duplicate save attempt"))
+            vm.effects.test {
+                vm.handleIntent(VoiceIntent.SaveTranscription("First valid trace to save"))
+                // Second intent fired before first completes — should be ignored
+                vm.handleIntent(VoiceIntent.SaveTranscription("Duplicate save attempt"))
 
-            // Allow coroutines to settle
-            kotlinx.coroutines.delay(100)
+                val effect = awaitItem()
+                assertIs<VoiceEffect.TraceSaved>(effect)
+                cancelAndIgnoreRemainingEvents()
+            }
 
             assertEquals(1, repo.savedTraces().size)
         }
