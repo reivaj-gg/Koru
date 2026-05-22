@@ -1,20 +1,20 @@
 package com.koru.domain.model
 
-import kotlin.time.Clock
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
+import kotlin.time.Clock
 
 class TraceTest {
-
     @Test
     fun `given blank content when Trace instantiated then throws exception`() {
         assertFailsWith<IllegalArgumentException> {
             Trace(
                 id = "123",
-                content = "   ", // Blank content
+                // Blank content — must trigger IllegalArgumentException
+                content = "   ",
                 context = null,
                 capturedAt = Clock.System.now(),
-                emotionTag = EmotionTag.CLARITY
+                emotionTag = EmotionTag.CLARITY,
             )
         }
     }
@@ -27,7 +27,7 @@ class TraceTest {
                 content = "Valid content",
                 context = null,
                 capturedAt = Clock.System.now(),
-                emotionTag = null
+                emotionTag = null,
             )
         }
     }

@@ -12,7 +12,7 @@ enum class EmotionTag {
     SURPRISE,
     CLARITY,
     RESISTANCE,
-    GRATITUDE
+    GRATITUDE,
 }
 
 /**

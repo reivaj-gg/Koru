@@ -4,7 +4,7 @@ package com.koru.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.koru.data.local.KoruDatabase
+import com.koru.database.KoruDatabase
 import com.koru.domain.model.Trace
 import com.koru.domain.repository.TraceRepository
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,6 @@ import kotlin.time.Instant
 class TraceRepositoryImpl(
     private val database: KoruDatabase,
 ) : TraceRepository {
-
     /**
      * Generated SQLDelight queries for the Trace table.
      */
@@ -61,7 +60,10 @@ class TraceRepositoryImpl(
         }
     }
 
-    override suspend fun search(semanticQuery: String, limit: Int): Result<List<Trace>> {
+    override suspend fun search(
+        semanticQuery: String,
+        limit: Int,
+    ): Result<List<Trace>> {
         return runCatching {
             queries.searchFts(
                 query = semanticQuery,

@@ -23,7 +23,6 @@ import kotlin.time.Clock
 class SaveTraceUseCase(
     private val repository: TraceRepository,
 ) {
-
     /**
      * Creates and saves a trace with the given parameters.
      *
@@ -46,13 +45,14 @@ class SaveTraceUseCase(
 
         val now = Clock.System.now()
 
-        val trace = Trace(
-            id = generateId(now.toEpochMilliseconds()),
-            content = content.trim(),
-            context = context?.trim()?.takeIf { it.isNotBlank() },
-            capturedAt = now,
-            emotionTag = emotionTag,
-        )
+        val trace =
+            Trace(
+                id = generateId(now.toEpochMilliseconds()),
+                content = content.trim(),
+                context = context?.trim()?.takeIf { it.isNotBlank() },
+                capturedAt = now,
+                emotionTag = emotionTag,
+            )
 
         return repository.save(trace)
     }

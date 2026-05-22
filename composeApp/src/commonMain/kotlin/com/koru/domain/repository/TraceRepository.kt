@@ -13,7 +13,7 @@ interface TraceRepository {
      * Emits a new list whenever the underlying data changes.
      */
     fun observeAll(): Flow<List<Trace>>
-    
+
     /**
      * Saves a trace locally (offline-first).
      * The AI sync happens asynchronously downstream.
@@ -23,7 +23,7 @@ interface TraceRepository {
      *         or [Result.failure] with a DomainError on validation or storage failure.
      */
     suspend fun save(trace: Trace): Result<String>
-    
+
     /**
      * Performs a local Full-Text Search on trace content.
      * Required as a pre-filter before any AI contextual insight.
@@ -32,5 +32,8 @@ interface TraceRepository {
      * @param limit Maximum number of traces to return.
      * @return [Result.success] with the matching traces, or [Result.failure] on error.
      */
-    suspend fun search(semanticQuery: String, limit: Int = 20): Result<List<Trace>>
+    suspend fun search(
+        semanticQuery: String,
+        limit: Int = 20,
+    ): Result<List<Trace>>
 }
