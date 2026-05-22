@@ -37,7 +37,7 @@ private class FakeTraceRepository(
 
 class HomeViewModelTest {
     @Test
-    fun `given initial state, when LoadTree intent, then state emits loading and then traces`() =
+    fun given_initial_state_when_LoadTree_then_emits_loading_and_traces() =
         runTest {
             val fakeTraces =
                 listOf(
@@ -66,7 +66,7 @@ class HomeViewModelTest {
         }
 
     @Test
-    fun `given database error, when LoadTree intent, then state emits error and effect is triggered`() =
+    fun given_db_error_when_LoadTree_then_emits_error() =
         runTest {
             val vm = HomeViewModel(FakeTraceRepository(shouldFail = true), TreeLayoutCalculator())
 
@@ -82,7 +82,7 @@ class HomeViewModelTest {
         }
 
     @Test
-    fun `given TapNode intent, then NavigateToTraceDetail effect is emitted`() =
+    fun given_TapNode_then_NavigateToTraceDetail_effect_emitted() =
         runTest {
             val vm = HomeViewModel(FakeTraceRepository(), TreeLayoutCalculator())
 

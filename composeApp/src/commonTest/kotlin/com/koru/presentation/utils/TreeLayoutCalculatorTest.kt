@@ -34,7 +34,7 @@ class TreeLayoutCalculatorTest {
         )
 
     @Test
-    fun `given list of traces, when calculateLayout called, then assigns valid absolute positions`() {
+    fun given_traces_when_calculateLayout_then_assigns_valid_positions() {
         val canvasWidth = 1000f
         val startY = 100f
         val ySpacing = 200f
@@ -71,7 +71,7 @@ class TreeLayoutCalculatorTest {
     }
 
     @Test
-    fun `given a touch exactly on node, when findHitNode called, then returns traceId`() {
+    fun given_exact_touch_when_findHitNode_then_returns_traceId() {
         val visualNodes =
             listOf(
                 VisualNode("trace-1", "A", NodePosition(100f, 100f), 50f, null),
@@ -87,7 +87,7 @@ class TreeLayoutCalculatorTest {
     }
 
     @Test
-    fun `given a touch outside node radius, when findHitNode called, then returns null`() {
+    fun given_outside_touch_when_findHitNode_then_returns_null() {
         val visualNodes =
             listOf(
                 VisualNode("trace-1", "A", NodePosition(100f, 100f), 50f, null),
@@ -99,7 +99,7 @@ class TreeLayoutCalculatorTest {
     }
 
     @Test
-    fun `given overlapping nodes, when findHitNode called within overlap, then returns top-most traceId`() {
+    fun given_overlapping_nodes_when_findHitNode_then_returns_top_most() {
         val visualNodes =
             listOf(
                 VisualNode("trace-bottom", "A", NodePosition(100f, 100f), 50f, null),
