@@ -10,6 +10,8 @@ import com.koru.domain.repository.VoiceCaptureRepository
 import com.koru.domain.usecase.ObserveTracesUseCase
 import com.koru.domain.usecase.SaveTraceUseCase
 import com.koru.domain.usecase.StartVoiceCaptureUseCase
+import com.koru.presentation.utils.TreeLayoutCalculator
+import com.koru.presentation.viewmodel.HomeViewModel
 import com.koru.presentation.viewmodel.VoiceCaptureViewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -29,6 +31,8 @@ val commonModule =
 
         // ─── ViewModels ───────────────────────────────────────────────────────
         factory { VoiceCaptureViewModel(get(), get(), get()) }
+        factory { TreeLayoutCalculator() }
+        factory { HomeViewModel(get(), get()) }
     }
 
 /**
