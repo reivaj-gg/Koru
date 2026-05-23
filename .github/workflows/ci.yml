@@ -79,7 +79,6 @@ jobs:
           echo "$(npm root -g)/../bin" >> $GITHUB_PATH
 
       - name: Ejecutar Gentleman Guardian Angel
-        continue-on-error: true
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_CLI_TRUST_WORKSPACE: true
