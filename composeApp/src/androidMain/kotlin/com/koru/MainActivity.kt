@@ -23,9 +23,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val applicationContext = this
         startKoin {
             androidLogger()
-            androidContext(this@MainActivity)
+            androidContext(applicationContext)
             modules(platformModule, dataModule, commonModule)
         }
 

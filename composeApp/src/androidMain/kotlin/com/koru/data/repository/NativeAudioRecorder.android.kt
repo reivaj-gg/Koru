@@ -44,9 +44,7 @@ internal actual class NativeAudioRecorder(
 
                     override fun onBeginningOfSpeech() {}
 
-                    override fun onRmsChanged(rmsdB: Float) {
-                        // Future implementation could emit amplitude here if needed
-                    }
+                    override fun onRmsChanged(rmsdB: Float) {}
 
                     override fun onBufferReceived(buffer: ByteArray?) {}
 

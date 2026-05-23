@@ -8,9 +8,6 @@ import com.koru.domain.repository.PermissionHelper
 
 /**
  * Android implementation of [MicrophonePermissionHelper].
- *
- * Note: Actual permission request on Android usually requires an Activity.
- * This is a simplified version for the contest architecture.
  */
 actual class MicrophonePermissionHelper(
     private val context: Context,

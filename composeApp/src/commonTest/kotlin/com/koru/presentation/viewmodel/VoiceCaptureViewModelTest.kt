@@ -34,6 +34,8 @@ private class FakeVoiceCaptureRepository : VoiceCaptureRepository {
 
 private class FakeSaveTraceRepository : com.koru.domain.repository.TraceRepository {
     private val saved = mutableListOf<Trace>()
+
+    // Justification: Allow changing failure mode mid-test for complex flows without re-instantiating the repository
     var shouldFail: Boolean = false
 
     fun savedTraces(): List<Trace> = saved.toList()
@@ -84,9 +86,18 @@ private fun buildViewModel(
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
+/**
+ * Tests for the [VoiceCaptureViewModel].
+ *
+ * Verifies the unidirectional data flow, interaction with use cases,
+ * and state emissions during transcription and saving processes.
+ */
 class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
+    /**
+     * Verifies that saving a valid transcription persists the trace and emits the success effect.
+     */
     @Test
-    fun given_valid_transcription_when_SaveTranscription_then_trace_is_persisted_and_TraceSaved_is_emitted() =
+    fun `given valid transcription, when SaveTranscription, then trace is persisted and TraceSaved is emitted`() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -103,8 +114,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             }
         }
 
+    /**
+     * Verifies that after a successful save, the state resets back to the initial idle state.
+     */
     @Test
-    fun given_valid_transcription_when_save_completes_then_state_resets_to_initial() =
+    fun `given valid transcription, when save completes, then state resets to initial`() =
         runTest {
             val (vm) = buildViewModel()
 
@@ -124,8 +138,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             }
         }
 
+    /**
+     * Verifies that saving a short transcription fails validation and emits a toast without saving.
+     */
     @Test
-    fun given_transcription_shorter_than_3_chars_when_SaveTranscription_then_ShowToast_is_emitted_and_nothing_is_saved() =
+    fun `given transcription shorter than 3 chars, when SaveTranscription, then ShowToast is emitted and nothing is saved`() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -142,8 +159,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             }
         }
 
+    /**
+     * Verifies that saving a blank transcription fails validation and emits a toast without saving.
+     */
     @Test
-    fun given_blank_transcription_when_SaveTranscription_then_ShowToast_is_emitted_and_nothing_is_saved() =
+    fun `given blank transcription, when SaveTranscription, then ShowToast is emitted and nothing is saved`() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -158,8 +178,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             }
         }
 
+    /**
+     * Verifies that when the repository fails to save, an error toast is emitted and the saving state resets.
+     */
     @Test
-    fun given_storage_failure_when_SaveTranscription_then_ShowToast_with_error_and_isSaving_resets() =
+    fun `given storage failure, when SaveTranscription, then ShowToast with error and isSaving resets`() =
         runTest {
             val failingRepo = FakeSaveTraceRepository().also { it.shouldFail = true }
             val (vm) = buildViewModel(saveRepository = failingRepo)
@@ -177,8 +200,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             assertFalse(vm.state.value.isSaving)
         }
 
+    /**
+     * Verifies that concurrent save intents are ignored while a save operation is already in progress.
+     */
     @Test
-    fun given_isSaving_true_when_SaveTranscription_then_second_save_is_ignored() =
+    fun `given isSaving true, when SaveTranscription, then second save is ignored`() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -195,8 +221,11 @@ class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule
             assertEquals(1, repo.savedTraces().size)
         }
 
+    /**
+     * Verifies that starting recording without permission updates the state with a permission denied error.
+     */
     @Test
-    fun given_permission_denied_when_StartRecording_then_PERMISSION_DENIED_error_is_set_in_state() =
+    fun `given permission denied, when StartRecording, then PERMISSION DENIED error is set in state`() =
         runTest {
             val noPermission = FakePermissionHelper(hasPermission = false, grantOnRequest = false)
             val (vm) = buildViewModel(permissionHelper = noPermission)
