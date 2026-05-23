@@ -81,6 +81,7 @@ jobs:
       - name: Ejecutar Gentleman Guardian Angel
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_CLI_TRUST_WORKSPACE: true
         run: gga run --ci
 
 
