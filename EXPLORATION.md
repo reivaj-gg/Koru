@@ -143,8 +143,8 @@ Alineado al ecosistema JetBrains/Kotlin Foundation:
 | `sdd-init` | ✅ Completo | `AGENTS.md` |
 | `sdd-explore` | ✅ Completo | Este documento |
 | `sdd-propose` | ✅ Completo | `PRD.md` |
-| `sdd-spec` | 🔲 Siguiente | — |
-| `sdd-design` | 🔲 Pendiente | — |
+| `sdd-spec` | ✅ Completo | `SPEC.md` |
+| `sdd-design` | ✅ Completo | `DESIGN.md` |
 | `sdd-tasks` | 🔲 Pendiente | — |
 | `sdd-apply` | 🔲 Pendiente | — |
 

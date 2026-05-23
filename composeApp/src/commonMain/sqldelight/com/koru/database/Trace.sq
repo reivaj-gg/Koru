@@ -1,11 +1,15 @@
 import com.koru.domain.model.EmotionTag;
+import kotlin.Boolean;
 
 CREATE TABLE TraceEntity (
     id TEXT NOT NULL PRIMARY KEY,
     content TEXT NOT NULL,
     context TEXT,
     capturedAt INTEGER NOT NULL,
-    emotionTag TEXT AS EmotionTag
+    emotionTag TEXT AS EmotionTag,
+    updatedAt INTEGER NOT NULL,
+    isSynced INTEGER AS Boolean DEFAULT 0,
+    isDeleted INTEGER AS Boolean DEFAULT 0
 );
 
 -- FTS5 Virtual Table for offline-first semantic search
@@ -13,39 +17,55 @@ CREATE VIRTUAL TABLE TraceFtsEntity USING fts5(
     id UNINDEXED,
     content,
     context,
+    content="TraceEntity",
     tokenize="unicode61"
 );
 
 -- Triggers to keep FTS in sync
 CREATE TRIGGER trace_ai AFTER INSERT ON TraceEntity BEGIN
-  INSERT INTO TraceFtsEntity(id, content, context)
-  VALUES (new.id, new.content, new.context);
+  INSERT INTO TraceFtsEntity(rowid, id, content, context)
+  VALUES (new.rowid, new.id, new.content, new.context);
 END;
 
 CREATE TRIGGER trace_ad AFTER DELETE ON TraceEntity BEGIN
-  INSERT INTO TraceFtsEntity(TraceFtsEntity, id, content, context)
-  VALUES ('delete', old.id, old.content, old.context);
+  INSERT INTO TraceFtsEntity(TraceFtsEntity, rowid, id, content, context)
+  VALUES ('delete', old.rowid, old.id, old.content, old.context);
 END;
 
 CREATE TRIGGER trace_au AFTER UPDATE ON TraceEntity BEGIN
-  INSERT INTO TraceFtsEntity(TraceFtsEntity, id, content, context)
-  VALUES ('delete', old.id, old.content, old.context);
-  INSERT INTO TraceFtsEntity(id, content, context)
-  VALUES (new.id, new.content, new.context);
+  INSERT INTO TraceFtsEntity(TraceFtsEntity, rowid, id, content, context)
+  VALUES ('delete', old.rowid, old.id, old.content, old.context);
+  INSERT INTO TraceFtsEntity(rowid, id, content, context)
+  VALUES (new.rowid, new.id, new.content, new.context);
 END;
 
 insertTrace:
-INSERT OR REPLACE INTO TraceEntity(id, content, context, capturedAt, emotionTag)
-VALUES (?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO TraceEntity(id, content, context, capturedAt, emotionTag, updatedAt, isSynced, isDeleted)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+markAsDeleted:
+UPDATE TraceEntity
+SET isDeleted = 1, updatedAt = :updatedAt, isSynced = 0
+WHERE id = :id;
+
+markAsSynced:
+UPDATE TraceEntity
+SET isSynced = 1
+WHERE id = :id;
+
+getPendingSync:
+SELECT * FROM TraceEntity
+WHERE isSynced = 0;
 
 observeAll:
 SELECT * FROM TraceEntity
+WHERE isDeleted = 0
 ORDER BY capturedAt DESC;
 
 searchFts:
 SELECT TraceEntity.*
 FROM TraceEntity
 JOIN TraceFtsEntity ON TraceEntity.id = TraceFtsEntity.id
-WHERE TraceFtsEntity MATCH :query
+WHERE TraceFtsEntity MATCH :query AND TraceEntity.isDeleted = 0
 ORDER BY TraceEntity.capturedAt DESC
 LIMIT :limit;

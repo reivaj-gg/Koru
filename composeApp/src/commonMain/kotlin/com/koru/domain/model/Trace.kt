@@ -2,7 +2,7 @@
 
 package com.koru.domain.model
 
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 /**
  * Represents an emotional or cognitive tag attached to a trace.

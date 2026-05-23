@@ -1,9 +1,8 @@
-@file:OptIn(kotlin.time.ExperimentalTime::class)
-
 package com.koru.data.repository
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import com.koru.data.mapper.toDomain
 import com.koru.database.KoruDatabase
 import com.koru.domain.model.Trace
 import com.koru.domain.repository.TraceRepository
@@ -11,23 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlin.time.Instant
 
-/**
- * SQLDelight-backed implementation of [TraceRepository].
- *
- * Persists traces to a local SQLite database with FTS5 full-text search.
- * All mapping between domain [Trace] and the generated `TraceEntity`
- * happens exclusively in this class — no SQLDelight types leak upstream.
- *
- * @param database The [KoruDatabase] instance provided via Koin DI.
- */
 class TraceRepositoryImpl(
     private val database: KoruDatabase,
 ) : TraceRepository {
-    /**
-     * Generated SQLDelight queries for the Trace table.
-     */
     private val queries = database.traceQueries
 
     override fun observeAll(): Flow<List<Trace>> {
@@ -35,15 +21,7 @@ class TraceRepositoryImpl(
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { entities ->
-                entities.map { entity ->
-                    Trace(
-                        id = entity.id,
-                        content = entity.content,
-                        context = entity.context,
-                        capturedAt = Instant.fromEpochMilliseconds(entity.capturedAt),
-                        emotionTag = entity.emotionTag,
-                    )
-                }
+                entities.map { it.toDomain() }
             }
     }
 
@@ -55,6 +33,9 @@ class TraceRepositoryImpl(
                 context = trace.context,
                 capturedAt = trace.capturedAt.toEpochMilliseconds(),
                 emotionTag = trace.emotionTag,
+                updatedAt = com.koru.domain.utils.currentEpochMillis(),
+                isSynced = false,
+                isDeleted = false,
             )
             trace.id
         }
@@ -68,15 +49,28 @@ class TraceRepositoryImpl(
             queries.searchFts(
                 query = semanticQuery,
                 limit = limit.toLong(),
-            ).executeAsList().map { entity ->
-                Trace(
-                    id = entity.id,
-                    content = entity.content,
-                    context = entity.context,
-                    capturedAt = Instant.fromEpochMilliseconds(entity.capturedAt),
-                    emotionTag = entity.emotionTag,
-                )
-            }
+            ).executeAsList().map { it.toDomain() }
+        }
+    }
+
+    override suspend fun delete(traceId: String): Result<Unit> {
+        return runCatching {
+            queries.markAsDeleted(
+                updatedAt = com.koru.domain.utils.currentEpochMillis(),
+                id = traceId,
+            )
+        }
+    }
+
+    override suspend fun getPendingSyncs(): Result<List<Trace>> {
+        return runCatching {
+            queries.getPendingSync().executeAsList().map { it.toDomain() }
+        }
+    }
+
+    override suspend fun markAsSynced(traceId: String): Result<Unit> {
+        return runCatching {
+            queries.markAsSynced(id = traceId)
         }
     }
 }

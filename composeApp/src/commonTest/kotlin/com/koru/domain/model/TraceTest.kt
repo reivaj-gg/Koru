@@ -1,8 +1,8 @@
 package com.koru.domain.model
 
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
-import kotlin.time.Clock
 
 class TraceTest {
     @Test
@@ -13,7 +13,7 @@ class TraceTest {
                 // Blank content — must trigger IllegalArgumentException
                 content = "   ",
                 context = null,
-                capturedAt = Clock.System.now(),
+                capturedAt = Instant.fromEpochMilliseconds(0),
                 emotionTag = EmotionTag.CLARITY,
             )
         }
@@ -26,7 +26,7 @@ class TraceTest {
                 id = "",
                 content = "Valid content",
                 context = null,
-                capturedAt = Clock.System.now(),
+                capturedAt = Instant.fromEpochMilliseconds(0),
                 emotionTag = null,
             )
         }

@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
-import kotlin.time.Instant
 
 private class FakeTraceRepository(
     private val traces: List<Trace> = emptyList(),
@@ -33,6 +33,18 @@ private class FakeTraceRepository(
         semanticQuery: String,
         limit: Int,
     ): Result<List<Trace>> = Result.success(emptyList())
+
+    override suspend fun delete(traceId: String): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun getPendingSyncs(): Result<List<Trace>> {
+        return Result.success(emptyList())
+    }
+
+    override suspend fun markAsSynced(traceId: String): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
 
 class HomeViewModelTest {

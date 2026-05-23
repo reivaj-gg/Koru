@@ -50,6 +50,19 @@ private class FakeSaveTraceRepository : com.koru.domain.repository.TraceReposito
         semanticQuery: String,
         limit: Int,
     ): Result<List<Trace>> = Result.success(emptyList())
+
+    override suspend fun delete(traceId: String): Result<Unit> {
+        saved.removeAll { it.id == traceId }
+        return Result.success(Unit)
+    }
+
+    override suspend fun getPendingSyncs(): Result<List<Trace>> {
+        return Result.success(emptyList())
+    }
+
+    override suspend fun markAsSynced(traceId: String): Result<Unit> {
+        return Result.success(Unit)
+    }
 }
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
@@ -72,7 +85,7 @@ private fun buildViewModel(
 
 class VoiceCaptureViewModelTest {
     @Test
-    fun `given valid transcription when SaveTranscription intent then trace is persisted and TraceSaved is emitted`() =
+    fun given_valid_transcription_when_SaveTranscription_then_trace_is_persisted_and_TraceSaved_is_emitted() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -90,7 +103,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given valid transcription when save completes then state resets to initial`() =
+    fun given_valid_transcription_when_save_completes_then_state_resets_to_initial() =
         runTest {
             val (vm) = buildViewModel()
 
@@ -111,7 +124,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given transcription shorter than 3 chars when SaveTranscription intent then ShowToast is emitted and nothing is saved`() =
+    fun given_transcription_shorter_than_3_chars_when_SaveTranscription_then_ShowToast_is_emitted_and_nothing_is_saved() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -129,7 +142,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given blank transcription when SaveTranscription intent then ShowToast is emitted and nothing is saved`() =
+    fun given_blank_transcription_when_SaveTranscription_then_ShowToast_is_emitted_and_nothing_is_saved() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -145,7 +158,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given storage failure when SaveTranscription intent then ShowToast with error is emitted and isSaving resets`() =
+    fun given_storage_failure_when_SaveTranscription_then_ShowToast_with_error_and_isSaving_resets() =
         runTest {
             val failingRepo = FakeSaveTraceRepository().also { it.shouldFail = true }
             val (vm) = buildViewModel(saveRepository = failingRepo)
@@ -164,7 +177,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given isSaving true when SaveTranscription intent then second save is ignored`() =
+    fun given_isSaving_true_when_SaveTranscription_then_second_save_is_ignored() =
         runTest {
             val (vm, repo) = buildViewModel()
 
@@ -182,7 +195,7 @@ class VoiceCaptureViewModelTest {
         }
 
     @Test
-    fun `given permission denied when StartRecording intent then PERMISSION_DENIED error is set in state`() =
+    fun given_permission_denied_when_StartRecording_then_PERMISSION_DENIED_error_is_set_in_state() =
         runTest {
             val noPermission = FakePermissionHelper(hasPermission = false, grantOnRequest = false)
             val (vm) = buildViewModel(permissionHelper = noPermission)

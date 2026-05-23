@@ -26,4 +26,17 @@ class FakeTraceRepository : TraceRepository {
             }.take(limit)
         return Result.success(matches)
     }
+
+    override suspend fun delete(traceId: String): Result<Unit> {
+        tracesFlow.update { it.filterNot { trace -> trace.id == traceId } }
+        return Result.success(Unit)
+    }
+
+    override suspend fun getPendingSyncs(): Result<List<Trace>> {
+        return Result.success(emptyList()) // Simple stub for tests
+    }
+
+    override suspend fun markAsSynced(traceId: String): Result<Unit> {
+        return Result.success(Unit) // Simple stub for tests
+    }
 }

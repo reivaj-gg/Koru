@@ -5,9 +5,9 @@ import com.koru.domain.model.Trace
 import com.koru.domain.repository.FakeTraceRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.Clock
 
 class ObserveTracesUseCaseTest {
     private val repository = FakeTraceRepository()
@@ -28,7 +28,7 @@ class ObserveTracesUseCaseTest {
                     id = "t1",
                     content = "First trace",
                     context = null,
-                    capturedAt = Clock.System.now(),
+                    capturedAt = Instant.fromEpochMilliseconds(0),
                     emotionTag = EmotionTag.CLARITY,
                 )
             val trace2 =
@@ -36,7 +36,7 @@ class ObserveTracesUseCaseTest {
                     id = "t2",
                     content = "Second trace",
                     context = "context",
-                    capturedAt = Clock.System.now(),
+                    capturedAt = Instant.fromEpochMilliseconds(1000),
                     emotionTag = EmotionTag.RESISTANCE,
                 )
 

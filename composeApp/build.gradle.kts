@@ -119,6 +119,7 @@ sqldelight {
     databases {
         create("KoruDatabase") {
             packageName.set("com.koru.database")
+            verifyMigrations.set(false)
         }
     }
 }
@@ -156,4 +157,9 @@ android {
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+}
+
+// FIX: Disable SQLDelight VerifyMigrationTask globally to avoid Windows sqlite-jdbc crash
+tasks.withType<app.cash.sqldelight.gradle.VerifyMigrationTask>().configureEach {
+    enabled = false
 }

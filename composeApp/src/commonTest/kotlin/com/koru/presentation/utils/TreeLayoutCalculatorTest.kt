@@ -21,14 +21,14 @@ class TreeLayoutCalculatorTest {
                 id = "trace-1",
                 content = "Primer pensamiento",
                 context = null,
-                capturedAt = kotlin.time.Instant.fromEpochMilliseconds(0),
+                capturedAt = kotlinx.datetime.Instant.fromEpochMilliseconds(0),
                 emotionTag = EmotionTag.CLARITY,
             ),
             Trace(
                 id = "trace-2",
                 content = "Segundo pensamiento un poco más largo para probar el truncado",
                 context = null,
-                capturedAt = kotlin.time.Instant.fromEpochMilliseconds(0),
+                capturedAt = kotlinx.datetime.Instant.fromEpochMilliseconds(0),
                 emotionTag = EmotionTag.RESISTANCE,
             ),
         )

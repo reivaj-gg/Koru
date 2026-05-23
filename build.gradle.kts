@@ -1,3 +1,9 @@
+buildscript {
+    dependencies {
+        classpath("org.xerial:sqlite-jdbc:3.41.2.2")
+    }
+}
+
 plugins {
     // Declared here to avoid loading plugins multiple times
     // in each subproject's classloader.
