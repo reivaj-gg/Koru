@@ -47,7 +47,7 @@ private class FakeTraceRepository(
     }
 }
 
-class HomeViewModelTest {
+class HomeViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
     @Test
     fun given_initial_state_when_LoadTree_then_emits_loading_and_traces() =
         runTest {
@@ -74,6 +74,8 @@ class HomeViewModelTest {
                 assertFalse(finalState.isLoading)
                 assertEquals(1, finalState.nodes.size)
                 assertEquals("1", finalState.nodes.first().traceId)
+
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
@@ -87,6 +89,7 @@ class HomeViewModelTest {
                 val effect = awaitItem()
                 assertIs<HomeEffect.ShowError>(effect)
                 assertEquals("Database error", effect.message)
+                cancelAndIgnoreRemainingEvents()
             }
 
             assertEquals("Database error", vm.state.value.error)
@@ -104,6 +107,7 @@ class HomeViewModelTest {
                 val effect = awaitItem()
                 assertIs<HomeEffect.NavigateToTraceDetail>(effect)
                 assertEquals("trace-123", effect.traceId)
+                cancelAndIgnoreRemainingEvents()
             }
         }
 }

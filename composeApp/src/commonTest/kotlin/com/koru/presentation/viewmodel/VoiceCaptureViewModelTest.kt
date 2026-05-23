@@ -83,7 +83,7 @@ private fun buildViewModel(
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
-class VoiceCaptureViewModelTest {
+class VoiceCaptureViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
     @Test
     fun given_valid_transcription_when_SaveTranscription_then_trace_is_persisted_and_TraceSaved_is_emitted() =
         runTest {
