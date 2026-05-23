@@ -55,7 +55,8 @@ class HomeViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
                 listOf(
                     Trace("1", "Hello", null, Instant.fromEpochMilliseconds(0), EmotionTag.CLARITY),
                 )
-            val vm = HomeViewModel(FakeTraceRepository(fakeTraces), TreeLayoutCalculator())
+            val fakeRepo = FakeTraceRepository(fakeTraces)
+            val vm = HomeViewModel(com.koru.domain.usecase.ObserveTracesUseCase(fakeRepo), TreeLayoutCalculator())
 
             vm.state.test {
                 // Estado inicial
@@ -81,7 +82,8 @@ class HomeViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
     @Test
     fun given_db_error_when_LoadTree_then_emits_error() =
         runTest {
-            val vm = HomeViewModel(FakeTraceRepository(shouldFail = true), TreeLayoutCalculator())
+            val fakeRepo = FakeTraceRepository(shouldFail = true)
+            val vm = HomeViewModel(com.koru.domain.usecase.ObserveTracesUseCase(fakeRepo), TreeLayoutCalculator())
 
             vm.effects.test {
                 vm.handleIntent(HomeIntent.LoadTree)
@@ -98,7 +100,8 @@ class HomeViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
     @Test
     fun given_TapNode_then_NavigateToTraceDetail_effect_emitted() =
         runTest {
-            val vm = HomeViewModel(FakeTraceRepository(), TreeLayoutCalculator())
+            val fakeRepo = FakeTraceRepository()
+            val vm = HomeViewModel(com.koru.domain.usecase.ObserveTracesUseCase(fakeRepo), TreeLayoutCalculator())
 
             vm.effects.test {
                 vm.handleIntent(HomeIntent.TapNode("trace-123"))

@@ -2,7 +2,7 @@ package com.koru.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.koru.domain.repository.TraceRepository
+import com.koru.domain.usecase.ObserveTracesUseCase
 import com.koru.presentation.utils.TreeLayoutCalculator
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,11 +22,11 @@ import kotlinx.coroutines.launch
  * through the pure [TreeLayoutCalculator], achieving zero UI/Compose
  * dependencies inside the ViewModel.
  *
- * @param traceRepository Repository to access the user's traces.
+ * @param observeTracesUseCase UseCase to observe user's traces.
  * @param layoutCalculator Mathematical calculator for node layout.
  */
 class HomeViewModel(
-    private val traceRepository: TraceRepository,
+    private val observeTracesUseCase: ObserveTracesUseCase,
     private val layoutCalculator: TreeLayoutCalculator,
 ) : ViewModel() {
     private val _state = MutableStateFlow(TreeState())
@@ -59,7 +59,7 @@ class HomeViewModel(
 
     private fun loadTree() {
         viewModelScope.launch {
-            traceRepository.observeAll()
+            observeTracesUseCase()
                 .onStart {
                     _state.update { it.copy(isLoading = true, error = null) }
                 }
