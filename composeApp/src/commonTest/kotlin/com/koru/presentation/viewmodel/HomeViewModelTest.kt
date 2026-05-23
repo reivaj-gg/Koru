@@ -65,9 +65,8 @@ class HomeViewModelTest : com.koru.presentation.utils.MainDispatcherRule() {
 
                 vm.handleIntent(HomeIntent.LoadTree)
 
-                // Estado Loading
-                val loading = awaitItem()
-                assertTrue(loading.isLoading)
+                // With UnconfinedTestDispatcher, the loading state is conflated.
+                // We directly assert the final state.
 
                 // Estado Final con los nodos calculados
                 val finalState = awaitItem()

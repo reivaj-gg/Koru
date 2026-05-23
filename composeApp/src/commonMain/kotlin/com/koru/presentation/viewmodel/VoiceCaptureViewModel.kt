@@ -34,7 +34,11 @@ data class VoiceCaptureUiState(
     val activeError: VoiceError? = null,
     val amplitude: Float = 0f,
     val isSaving: Boolean = false,
-)
+) {
+    init {
+        require(amplitude in 0f..1f) { "Amplitude must be between 0.0 and 1.0" }
+    }
+}
 
 /**
  * User-initiated actions for the voice capture flow.

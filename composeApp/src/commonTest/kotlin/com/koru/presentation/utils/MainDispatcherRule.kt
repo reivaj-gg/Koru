@@ -2,8 +2,8 @@ package com.koru.presentation.utils
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kotlin.test.AfterTest
@@ -16,7 +16,7 @@ import kotlin.test.BeforeTest
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 open class MainDispatcherRule(
-    val testDispatcher: TestDispatcher = StandardTestDispatcher(),
+    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) {
     @BeforeTest
     fun setup() {

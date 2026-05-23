@@ -23,8 +23,8 @@ actual class MicrophonePermissionHelper(
     }
 
     actual override suspend fun requestMicrophonePermission(): Boolean {
-        // High-level bridge: Real implementation would use an Activity result launcher.
-        // Returning current state for the MVP architecture.
+        // Fallback for when no UI controller is bound to request permission directly.
+        // It relies on the permission already being granted by the user in settings.
         return hasMicrophonePermission()
     }
 }

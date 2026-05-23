@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -30,11 +33,11 @@ import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
- * Pantalla principal que renderiza el árbol de trazos.
+ * Main screen that renders the trace tree.
  *
- * Es una UI "tonta" (Dumb UI) que se limita a observar [TreeState] y dibujar los nodos usando
- * un Canvas optimizado para evitar recomposiciones. Todo el hit-testing se delega
- * matemáticamente a [TreeLayoutCalculator].
+ * This is a Dumb UI that only observes [TreeState] and draws nodes using
+ * an optimized Canvas to avoid recompositions. All hit-testing is delegated
+ * mathematically to [TreeLayoutCalculator].
  */
 @Suppress("FunctionName")
 @Composable
@@ -45,19 +48,23 @@ fun HomeScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(Unit) {
         viewModel.handleIntent(HomeIntent.LoadTree)
         viewModel.effects.collect { effect ->
             when (effect) {
                 is HomeEffect.NavigateToTraceDetail -> onNavigateToTrace(effect.traceId)
                 is HomeEffect.ShowError -> {
-                    // Aquí se integraría con el SnackbarHost del Scaffold
+                    snackbarHostState.showSnackbar(effect.message)
                 }
             }
         }
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { paddingValues ->
         Box(
             modifier =
                 Modifier
@@ -86,8 +93,8 @@ fun HomeScreen(
 }
 
 /**
- * Componente interno que aísla el renderizado del Canvas para maximizar el rendimiento
- * y minimizar las lecturas de estado que provocan jank.
+ * Internal component isolating Canvas rendering to maximize performance
+ * and minimize state reads that cause jank.
  */
 @Suppress("FunctionName")
 @Composable
@@ -96,7 +103,7 @@ private fun TreeCanvas(
     calculator: TreeLayoutCalculator,
     onNodeTap: (String) -> Unit,
 ) {
-    // Mapeo puro y visual de emociones a colores
+    // Pure visual mapping from emotions to colors
     val colorMap =
         mapOf(
             EmotionTag.CLARITY to Color(0xFF4CAF50),
@@ -115,8 +122,8 @@ private fun TreeCanvas(
                 .fillMaxSize()
                 .pointerInput(nodes) {
                     detectTapGestures { offset ->
-                        // Delegación estricta del hit-testing a la clase matemática pura.
-                        // Cero matemática en la UI.
+                        // Strict delegation of hit-testing to the pure mathematical class.
+                        // Zero math in the UI.
                         val hitTraceId = calculator.findHitNode(offset.x, offset.y, nodes)
                         if (hitTraceId != null) {
                             onNodeTap(hitTraceId)
@@ -126,7 +133,7 @@ private fun TreeCanvas(
     ) {
         if (nodes.isEmpty()) return@Canvas
 
-        // 1. Dibujar ramas (curvas Bézier suaves entre nodos)
+        // 1. Draw branches (smooth Bézier curves between nodes)
         if (nodes.size > 1) {
             val path = Path()
             path.moveTo(nodes.first().position.x, nodes.first().position.y)
@@ -154,7 +161,7 @@ private fun TreeCanvas(
             )
         }
 
-        // 2. Dibujar nodos
+        // 2. Draw nodes
         for (node in nodes) {
             val nodeColor = node.emotionTag?.let { colorMap[it] } ?: defaultColor
 

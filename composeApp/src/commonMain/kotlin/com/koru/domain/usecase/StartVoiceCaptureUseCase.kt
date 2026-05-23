@@ -5,20 +5,20 @@ import com.koru.domain.repository.VoiceCaptureRepository
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Orquestador de la captura de voz en el dominio.
+ * Domain orchestrator for voice capture.
  *
- * Encapsula la lógica de inicio de captura delegando en el repositorio
- * correspondiente inyectado por Koin.
+ * Encapsulates the logic of initiating capture by delegating to the
+ * corresponding repository injected via Koin.
  *
- * @param repository La implementación de [VoiceCaptureRepository] en la capa Data.
+ * @param repository The [VoiceCaptureRepository] implementation in the Data layer.
  */
 class StartVoiceCaptureUseCase(
     private val repository: VoiceCaptureRepository,
 ) {
     /**
-     * Inicia el flujo de captura y reconocimiento de voz.
+     * Starts the voice capture and recognition flow.
      *
-     * @return Un stream de [TranscriptionState] con actualizaciones en tiempo real.
+     * @return A stream of [TranscriptionState] with real-time updates.
      */
     operator fun invoke(): Flow<TranscriptionState> = repository.startCapture()
 }

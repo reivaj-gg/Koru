@@ -41,6 +41,7 @@ private class FakeSaveTraceRepository : com.koru.domain.repository.TraceReposito
     override fun observeAll(): Flow<List<Trace>> = kotlinx.coroutines.flow.flowOf(saved.toList())
 
     override suspend fun save(trace: Trace): Result<String> {
+        kotlinx.coroutines.delay(10)
         if (shouldFail) return Result.failure(RuntimeException("Storage error"))
         saved.add(trace)
         return Result.success(trace.id)

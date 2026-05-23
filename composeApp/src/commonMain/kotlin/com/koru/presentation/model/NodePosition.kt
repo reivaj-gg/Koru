@@ -1,14 +1,19 @@
 package com.koru.presentation.model
 
 /**
- * Representa la posición visual bidimensional absoluta de un nodo en el Canvas.
+ * Represents the absolute 2D visual position of a node on the Canvas.
  *
- * Esta clase es puramente matemática y no tiene dependencias del framework de UI.
+ * This class is purely mathematical and has no UI framework dependencies.
  *
- * @property x La coordenada horizontal.
- * @property y La coordenada vertical.
+ * @property x The horizontal coordinate.
+ * @property y The vertical coordinate.
  */
 data class NodePosition(
     val x: Float,
     val y: Float,
-)
+) {
+    init {
+        require(!x.isNaN()) { "x coordinate cannot be NaN" }
+        require(!y.isNaN()) { "y coordinate cannot be NaN" }
+    }
+}

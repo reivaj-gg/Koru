@@ -1,8 +1,6 @@
-@file:OptIn(kotlin.time.ExperimentalTime::class)
-
 package com.koru.domain.model
 
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 /**
  * An AI-generated reflection attached to one or more [Trace] entries.

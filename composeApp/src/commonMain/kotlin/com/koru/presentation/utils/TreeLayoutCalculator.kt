@@ -7,22 +7,22 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
- * Clase matemática pura responsable de calcular las posiciones de los nodos
- * y resolver interacciones espaciales (hit-testing).
+ * Pure mathematical class responsible for calculating node positions
+ * and resolving spatial interactions (hit-testing).
  *
- * Cero dependencias de UI o Compose, garantizando que todo el layout es
- * unit testable de manera determinista.
+ * Zero dependencies on UI or Compose, guaranteeing that the entire layout is
+ * deterministically unit testable.
  */
 class TreeLayoutCalculator {
     /**
-     * Calcula las posiciones espaciales de una lista de trazos simulando un patrón orgánico (curva sinodal).
+     * Calculates the spatial positions of a list of traces simulating an organic pattern (sine curve).
      *
-     * @param traces Lista de [Trace] provenientes del dominio.
-     * @param canvasWidth Ancho disponible del canvas.
-     * @param startY Margen superior donde comienza el árbol.
-     * @param ySpacing Distancia vertical entre cada nodo.
-     * @param nodeRadius Radio uniforme para los nodos generados.
-     * @return Lista de [VisualNode] con coordenadas matemáticas absolutas.
+     * @param traces List of [Trace] from the domain.
+     * @param canvasWidth Available width of the canvas.
+     * @param startY Top margin where the tree begins.
+     * @param ySpacing Vertical distance between each node.
+     * @param nodeRadius Uniform radius for the generated nodes.
+     * @return List of [VisualNode] with absolute mathematical coordinates.
      */
     fun calculateLayout(
         traces: List<Trace>,
@@ -32,8 +32,8 @@ class TreeLayoutCalculator {
         nodeRadius: Float = 60f,
     ): List<VisualNode> {
         return traces.mapIndexed { index, trace ->
-            // Normalizamos X usando una función seno para generar una curva zig-zag fluida.
-            // Multiplicamos por 0.25f para que la oscilación se mantenga entre el 25% y 75% del ancho.
+            // Normalize X using a sine function to generate a smooth zig-zag curve.
+            // Multiply by 0.25f so the oscillation stays between 25% and 75% of the width.
             val normalizedX = (sin(index.toFloat()) * 0.25f) + 0.5f
             val x = canvasWidth * normalizedX
             val y = startY + (index * ySpacing)
@@ -49,13 +49,13 @@ class TreeLayoutCalculator {
     }
 
     /**
-     * Resuelve el hit-testing utilizando distancia Euclidiana.
-     * Iterando en reverso, asume que los últimos elementos de la lista se dibujan por encima.
+     * Resolves hit-testing using Euclidean distance.
+     * Iterating in reverse, assuming that the last elements of the list are drawn on top.
      *
-     * @param touchX Coordenada horizontal del evento táctil.
-     * @param touchY Coordenada vertical del evento táctil.
-     * @param nodes Lista de nodos visuales actualmente en pantalla.
-     * @return El [VisualNode.traceId] del nodo tocado, o null si el toque fue al vacío.
+     * @param touchX Horizontal coordinate of the touch event.
+     * @param touchY Vertical coordinate of the touch event.
+     * @param nodes List of visual nodes currently on screen.
+     * @return The [VisualNode.traceId] of the touched node, or null if empty space was touched.
      */
     fun findHitNode(
         touchX: Float,

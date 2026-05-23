@@ -16,14 +16,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
- * ViewModel que gestiona el estado inmutable del árbol de la HomeScreen.
+ * ViewModel that manages the immutable state of the HomeScreen tree.
  *
- * Expone un flujo de estado estrictamente unidireccional y procesa la data
- * del dominio a través del [TreeLayoutCalculator] puro, logrando cero dependencias
- * de UI/Compose dentro del ViewModel.
+ * Exposes a strictly unidirectional state flow and processes domain data
+ * through the pure [TreeLayoutCalculator], achieving zero UI/Compose
+ * dependencies inside the ViewModel.
  *
- * @param traceRepository Repositorio para acceder a los trazos del usuario.
- * @param layoutCalculator Calculador matemático para el layout de los nodos.
+ * @param traceRepository Repository to access the user's traces.
+ * @param layoutCalculator Mathematical calculator for node layout.
  */
 class HomeViewModel(
     private val traceRepository: TraceRepository,
@@ -32,27 +32,27 @@ class HomeViewModel(
     private val _state = MutableStateFlow(TreeState())
 
     /**
-     * Flujo de estado observabable por la UI. Estrictamente inmutable.
+     * Observable state flow for the UI. Strictly immutable.
      */
     val state: StateFlow<TreeState> = _state.asStateFlow()
 
     private val _effects = MutableSharedFlow<HomeEffect>()
 
     /**
-     * Efectos únicos para ser consumidos (ej. navegación, errores).
+     * One-time effects to be consumed (e.g. navigation, errors).
      */
     val effects: SharedFlow<HomeEffect> = _effects.asSharedFlow()
 
     /**
-     * Único punto de entrada para acciones iniciadas por el usuario.
+     * Single entry point for user-initiated actions.
      */
     fun handleIntent(intent: HomeIntent) {
         when (intent) {
             is HomeIntent.LoadTree -> loadTree()
             is HomeIntent.TapNode -> handleNodeTap(intent.traceId)
             is HomeIntent.OpenCapture -> {
-                // Generalmente, OpenCapture lo resuelve la navegación de la UI directamente,
-                // pero se incluye en MVI por si en el futuro requerimos logging o análisis.
+                // Generally, OpenCapture is handled directly by UI navigation,
+                // but it's included in MVI in case we require logging or analytics in the future.
             }
         }
     }
@@ -73,8 +73,8 @@ class HomeViewModel(
                     _effects.emit(HomeEffect.ShowError(e.message ?: "Unknown Error"))
                 }
                 .collect { traces ->
-                    // El cálculo matemático se realiza asumiendo un lienzo lógico virtual.
-                    // La vista de Compose luego escala este canvas matemático a la resolución real.
+                    // The mathematical calculation is performed assuming a virtual logical canvas.
+                    // The Compose view then scales this mathematical canvas to the actual resolution.
                     val nodes = layoutCalculator.calculateLayout(traces, canvasWidth = 1000f)
                     _state.update {
                         it.copy(
