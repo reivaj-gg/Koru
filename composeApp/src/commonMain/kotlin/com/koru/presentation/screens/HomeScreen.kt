@@ -35,7 +35,7 @@ import org.koin.compose.viewmodel.koinViewModel
 /**
  * Main screen that renders the trace tree.
  *
- * This is a Dumb UI that only observes [TreeState] and draws nodes using
+ * This is a Dumb UI that only observes [HomeState] and draws nodes using
  * an optimized Canvas to avoid recompositions. All hit-testing is delegated
  * mathematically to [TreeLayoutCalculator].
  */

@@ -29,12 +29,12 @@ class HomeViewModel(
     private val observeTracesUseCase: ObserveTracesUseCase,
     private val layoutCalculator: TreeLayoutCalculator,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(TreeState())
+    private val _state = MutableStateFlow(HomeState())
 
     /**
      * Observable state flow for the UI. Strictly immutable.
      */
-    val state: StateFlow<TreeState> = _state.asStateFlow()
+    val state: StateFlow<HomeState> = _state.asStateFlow()
 
     private val _effects = MutableSharedFlow<HomeEffect>()
 
@@ -75,7 +75,7 @@ class HomeViewModel(
                 .collect { traces ->
                     // The mathematical calculation is performed assuming a virtual logical canvas.
                     // The Compose view then scales this mathematical canvas to the actual resolution.
-                    val nodes = layoutCalculator.calculateLayout(traces, canvasWidth = 1000f)
+                    val nodes = layoutCalculator.calculateLayout(traces, canvasWidth = LOGICAL_CANVAS_WIDTH)
                     _state.update {
                         it.copy(
                             nodes = nodes,
@@ -91,5 +91,13 @@ class HomeViewModel(
         viewModelScope.launch {
             _effects.emit(HomeEffect.NavigateToTraceDetail(traceId))
         }
+    }
+
+    companion object {
+        /**
+         * Width of the virtual logical canvas used for layout math.
+         * The Compose view scales this to the actual screen resolution.
+         */
+        const val LOGICAL_CANVAS_WIDTH = 1000f
     }
 }

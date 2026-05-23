@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
  * @param amplitude Real-time audio volume level (0.0 to 1.0) for circle animations.
  * @param isSaving True while [SaveTraceUseCase] is running — prevents double-submit.
  */
-data class VoiceCaptureUiState(
+data class VoiceCaptureState(
     val transcription: String = "",
     val isRecording: Boolean = false,
     val activeError: VoiceError? = null,
@@ -99,12 +99,12 @@ class VoiceCaptureViewModel(
     private val permissionHelper: PermissionHelper,
     private val saveTraceUseCase: SaveTraceUseCase,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(VoiceCaptureUiState())
+    private val _state = MutableStateFlow(VoiceCaptureState())
 
     /**
-     * Observable stream of [VoiceCaptureUiState].
+     * Observable stream of [VoiceCaptureState].
      */
-    val state: StateFlow<VoiceCaptureUiState> = _state.asStateFlow()
+    val state: StateFlow<VoiceCaptureState> = _state.asStateFlow()
 
     private val _effects = MutableSharedFlow<VoiceEffect>()
 
@@ -185,7 +185,7 @@ class VoiceCaptureViewModel(
      * Persists the transcription as a [com.koru.domain.model.Trace] via [SaveTraceUseCase].
      *
      * Guards against content shorter than 3 characters (not meaningful enough to save)
-     * and prevents concurrent saves with [VoiceCaptureUiState.isSaving].
+     * and prevents concurrent saves with [VoiceCaptureState.isSaving].
      * On success, emits [VoiceEffect.TraceSaved] to trigger navigation.
      * On failure, emits [VoiceEffect.ShowToast] with the error message.
      *
@@ -204,7 +204,7 @@ class VoiceCaptureViewModel(
         viewModelScope.launch {
             saveTraceUseCase(content = text)
                 .onSuccess {
-                    _state.update { VoiceCaptureUiState() }
+                    _state.update { VoiceCaptureState() }
                     _effects.emit(VoiceEffect.TraceSaved)
                 }
                 .onFailure { error ->

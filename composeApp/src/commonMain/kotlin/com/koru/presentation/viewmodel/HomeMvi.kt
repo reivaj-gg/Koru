@@ -12,7 +12,7 @@ import com.koru.presentation.model.VisualNode
  * @property isLoading Indicates if the tree is currently loading or analyzing data.
  * @property error Error message to display if data loading fails.
  */
-data class TreeState(
+data class HomeState(
     val nodes: List<VisualNode> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null,
