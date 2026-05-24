@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.Flow
 class ObserveTracesUseCase(
     private val repository: TraceRepository,
 ) {
-
     /**
      * Returns a [Flow] that emits the full list of traces
      * in descending chronological order whenever the data changes.

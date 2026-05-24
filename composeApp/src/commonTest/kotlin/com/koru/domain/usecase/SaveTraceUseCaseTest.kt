@@ -10,38 +10,41 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class SaveTraceUseCaseTest {
-
     private val repository = FakeTraceRepository()
     private val saveTraceUseCase = SaveTraceUseCase(repository)
 
     @Test
-    fun `given valid content when invoked then trace is saved and result is success`() = runTest {
-        val result = saveTraceUseCase(
-            content = "This is a meaningful trace",
-            context = null,
-            emotionTag = EmotionTag.CLARITY,
-        )
+    fun given_valid_content_when_invoked_then_trace_is_saved_and_result_is_success() =
+        runTest {
+            val result =
+                saveTraceUseCase(
+                    content = "This is a meaningful trace",
+                    context = null,
+                    emotionTag = EmotionTag.CLARITY,
+                )
 
-        assertTrue(result.isSuccess)
-        val savedId = result.getOrThrow()
-        assertNotNull(savedId)
+            assertTrue(result.isSuccess)
+            val savedId = result.getOrThrow()
+            assertNotNull(savedId)
 
-        val traces = repository.observeAll().first()
-        assertEquals(1, traces.size)
-        assertEquals("This is a meaningful trace", traces[0].content)
-        assertEquals(EmotionTag.CLARITY, traces[0].emotionTag)
-    }
+            val traces = repository.observeAll().first()
+            assertEquals(1, traces.size)
+            assertEquals("This is a meaningful trace", traces[0].content)
+            assertEquals(EmotionTag.CLARITY, traces[0].emotionTag)
+        }
 
     @Test
-    fun `given blank content when invoked then returns failure`() = runTest {
-        val result = saveTraceUseCase(
-            content = "   ",
-            context = null,
-            emotionTag = EmotionTag.TENSION,
-        )
+    fun given_blank_content_when_invoked_then_returns_failure() =
+        runTest {
+            val result =
+                saveTraceUseCase(
+                    content = "   ",
+                    context = null,
+                    emotionTag = EmotionTag.TENSION,
+                )
 
-        assertTrue(result.isFailure)
-        val traces = repository.observeAll().first()
-        assertEquals(0, traces.size)
-    }
+            assertTrue(result.isFailure)
+            val traces = repository.observeAll().first()
+            assertEquals(0, traces.size)
+        }
 }

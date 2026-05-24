@@ -210,7 +210,7 @@ Output format:
 Rules:
 - Never commit failing tests.
 - Never write implementation before a failing test exists.
-- After each task, run `./gradlew :shared:allTests` and confirm green.
+- After each task, run `./gradlew ktlintFormat` and `./gradlew check` and confirm green. **Never commit or push without these local CI verifications passing.** Uploading non-functional code is unacceptable.
 - Reference the spec — if implementation diverges from spec, surface it immediately.
 
 ---
@@ -333,6 +333,7 @@ object AppConstants
 enum class EmotionTag
 
 // Functions, properties → camelCase
+// Composable functions → UpperCamelCase
 fun saveTrace()
 val totalTraces: Int
 
@@ -603,6 +604,7 @@ fun createTestDatabase(): KoruDatabase {
 12. Write implementation code before a failing test exists.
 13. Skip a SDD phase without explicit developer approval and a written justification.
 14. Use `println` for logging — use Napier instead.
+15. Commit or push code without first running and passing local CI verifications (`./gradlew ktlintFormat`, `./gradlew check`, and `./gradlew :composeApp:iosSimulatorArm64Test`). Uploading non-functional code is unacceptable. You must guarantee 3/3 passing checks (ktlint/Common, Android, iOS) in GitHub Actions.
 
 ---
 
@@ -646,14 +648,14 @@ Reference them by name to load targeted pattern knowledge.
 
 | Skill ID | What it teaches | Status |
 |---|---|---|
-| `kmp-architecture` | Module structure, layer boundaries, Clean Architecture in KMP | 🔲 Planned |
+| `kmp-architecture` | Module structure, layer boundaries, Clean Architecture in KMP | ✅ Done |
 | `expect-actual-guide` | Step-by-step first expect/actual — from declaration to platform impl | 🔲 Planned |
 | `kmp-audio-capture` | AudioRecord (Android) + AVFoundation (iOS) via expect/actual | 🔲 Planned |
-| `sqldelight-fts5-setup` | FTS5 virtual tables, SQLDelight migrations, FTS query patterns | 🔲 Planned |
+| `sqldelight-fts5-setup` | FTS5 virtual tables, SQLDelight migrations, FTS query patterns | ✅ Done |
 | `ktor-gemini-sync` | Ktor client configuration, Gemini API integration, context payload strategy | 🔲 Planned |
 | `compose-canvas-tree` | Compose Canvas — node rendering, connection threads, pulse animations | 🔲 Planned |
-| `mvi-state-contracts` | State/Intent/Effect pattern with Turbine testing examples | 🔲 Planned |
-| `offline-first-sync` | Local-first save, background sync, conflict resolution | 🔲 Planned |
+| `mvi-state-contracts` | State/Intent/Effect pattern with Turbine testing examples | ✅ Done |
+| `offline-first-sync` | Local-first save, background sync, conflict resolution | ✅ Done |
 | `tdd-kmp-patterns` | TDD in KMP: fake repos, in-memory SQLDelight driver, Ktor MockEngine | 🔲 Planned |
 | `sdd-workflow` | Full 8-phase SDD workflow with examples from this codebase | 🔲 Planned |
 | `koin-kmp-setup` | Koin module declaration and injection patterns for KMP | 🔲 Planned |
@@ -783,6 +785,7 @@ Secrets (Gemini API keys, signing keystores) live in **GitHub Actions secrets** 
 - Prefer **issue-linked PRs** over pushing large unreviewed batches to `main`.
 - Treat **architecture violations** (e.g. OkHttp, Room, business logic in Composables) as
   merge blockers and say so explicitly in review.
+- **Never commit without local verification.** Always ensure the 3/3 GitHub Actions checks will pass by running: `./gradlew ktlintFormat`, `./gradlew check` (for Android/Common), and `./gradlew :composeApp:iosSimulatorArm64Test` (for iOS). Submitting broken builds or non-functional code is an absolute failure.
 - When Gradle modules, tasks, or stack constraints change, **update this file and
   `README.md` in the same PR or an immediate follow-up** so `AGENTS.md` stays the single
   source of truth.

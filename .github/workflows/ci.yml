@@ -20,7 +20,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -28,6 +28,8 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: false
 
       # Runs the linter (ktlint/detekt) and unit tests for commonMain and Android
       - name: Run Checks and Unit Tests
@@ -39,14 +41,14 @@ jobs:
   ios:
     name: Build & Test (iOS)
     # macos-14 uses Apple Silicon (M1/M2) architecture, ideal for fast KMP compilation
-    runs-on: macos-14 
+    runs-on: macos-14
     timeout-minutes: 60
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -81,6 +83,7 @@ jobs:
       - name: Ejecutar Gentleman Guardian Angel
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_CLI_TRUST_WORKSPACE: true
         run: gga run --ci
 
 

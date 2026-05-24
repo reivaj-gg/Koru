@@ -1,0 +1,43 @@
+# Android Studio / IntelliJ EditorConfig
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+# Kotlin specific rules
+kotlin_imports_layout = *,java.**,javax.**,kotlin.**,kotlinx.**
+# Trailing commas are required in multi-line declarations (since Kotlin 1.4)
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+
+# Ktlint rules — use ktlint_standard_ prefix (ktlint >= 0.49)
+ktlint_standard_no-wildcard-imports = disabled
+
+# ─── JetBrains scaffold exclusions ───────────────────────────────────────────
+# Files under org/example/project/ are JetBrains-generated template stubs.
+# They do not follow Koru conventions and are exempt from style enforcement.
+# Syntax: ktlint_standard_<rule-id> = disabled (ktlint >= 0.49 format)
+[{**/org/example/project/*.kt,**/org/example/project/**/*.kt}]
+ktlint_standard_max-line-length = disabled
+ktlint_standard_function-naming = disabled
+ktlint_standard_package-name = disabled
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
+
+# ─── Generated files exclusions ────────────────────────────────────────────
+# Ignore SQLDelight and other build/generated code
+[{**/build/**/*.kt,**/generated/**/*.kt}]
+ktlint_standard_indent = disabled
+ktlint_standard_wrapping = disabled
+ktlint_standard_multiline-expression-wrapping = disabled
+ktlint_standard_no-unused-imports = disabled
+ktlint_standard_trailing-comma-on-call-site = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
