@@ -8,12 +8,16 @@ import platform.AVFAudio.AVAudioSessionRecordPermissionGranted
  * iOS implementation of [MicrophonePermissionHelper].
  */
 actual class MicrophonePermissionHelper : PermissionHelper {
-    actual override fun hasMicrophonePermission(): Boolean {
-        return AVAudioSession.sharedInstance().recordPermission() == AVAudioSessionRecordPermissionGranted
-    }
+    /**
+     * Checks if the microphone permission is currently granted.
+     * @return true if granted, false otherwise.
+     */
+    actual override fun hasMicrophonePermission(): Boolean =
+        AVAudioSession.sharedInstance().recordPermission() == AVAudioSessionRecordPermissionGranted
 
-    actual override suspend fun requestMicrophonePermission(): Boolean {
-        // High-level bridge for the contest architecture.
-        return hasMicrophonePermission()
-    }
+    /**
+     * Requests microphone permission.
+     * @return true if granted, false otherwise.
+     */
+    actual override suspend fun requestMicrophonePermission(): Boolean = hasMicrophonePermission()
 }

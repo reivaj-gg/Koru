@@ -333,6 +333,7 @@ object AppConstants
 enum class EmotionTag
 
 // Functions, properties → camelCase
+// Composable functions → UpperCamelCase
 fun saveTrace()
 val totalTraces: Int
 

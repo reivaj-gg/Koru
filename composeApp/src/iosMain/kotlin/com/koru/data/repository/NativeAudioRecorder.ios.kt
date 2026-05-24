@@ -20,6 +20,9 @@ internal actual class NativeAudioRecorder {
     private var audioEngine: AVAudioEngine? = null
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest? = null
 
+    /**
+     * A flow emitting voice transcription states.
+     */
     actual val transcriptionFlow: Flow<TranscriptionState> =
         callbackFlow {
             val recognizer = SFSpeechRecognizer()
@@ -68,6 +71,9 @@ internal actual class NativeAudioRecorder {
             }
         }
 
+    /**
+     * Stops the audio recording.
+     */
     actual fun stop() {
         recognitionRequest?.endAudio()
         audioEngine?.stop()

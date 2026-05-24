@@ -26,20 +26,19 @@ class TraceRepositoryImpl(
     /**
      * Observes all traces from the local database.
      */
-    override fun observeAll(): Flow<List<Trace>> {
-        return queries.observeAll()
+    override fun observeAll(): Flow<List<Trace>> =
+        queries.observeAll()
             .asFlow()
             .mapToList(Dispatchers.IO)
             .map { entities ->
                 entities.map { it.toDomain() }
             }
-    }
 
     /**
      * Persists a trace and flags it as unsynced.
      */
-    override suspend fun save(trace: Trace): Result<String> {
-        return runCatching {
+    override suspend fun save(trace: Trace): Result<String> =
+        runCatching {
             queries.insertTrace(
                 id = trace.id,
                 content = trace.content,
@@ -52,7 +51,6 @@ class TraceRepositoryImpl(
             )
             trace.id
         }
-    }
 
     /**
      * Searches traces using FTS5 match semantics.
@@ -60,42 +58,38 @@ class TraceRepositoryImpl(
     override suspend fun search(
         semanticQuery: String,
         limit: Int,
-    ): Result<List<Trace>> {
-        return runCatching {
+    ): Result<List<Trace>> =
+        runCatching {
             queries.searchFts(
                 query = semanticQuery,
                 limit = limit.toLong(),
             ).executeAsList().map { it.toDomain() }
         }
-    }
 
     /**
      * Logically deletes a trace by marking it as deleted and updating its timestamp.
      */
-    override suspend fun delete(traceId: String): Result<Unit> {
-        return runCatching {
+    override suspend fun delete(traceId: String): Result<Unit> =
+        runCatching {
             queries.markAsDeleted(
                 updatedAt = com.koru.domain.utils.currentEpochMillis(),
                 id = traceId,
             )
         }
-    }
 
     /**
      * Returns traces that need to be synced with the server.
      */
-    override suspend fun getPendingSyncs(): Result<List<Trace>> {
-        return runCatching {
+    override suspend fun getPendingSyncs(): Result<List<Trace>> =
+        runCatching {
             queries.getPendingSync().executeAsList().map { it.toDomain() }
         }
-    }
 
     /**
      * Marks a trace as synced and successfully uploaded.
      */
-    override suspend fun markAsSynced(traceId: String): Result<Unit> {
-        return runCatching {
+    override suspend fun markAsSynced(traceId: String): Result<Unit> =
+        runCatching {
             queries.markAsSynced(id = traceId)
         }
-    }
 }

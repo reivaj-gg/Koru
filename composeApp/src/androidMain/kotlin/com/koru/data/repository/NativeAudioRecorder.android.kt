@@ -25,6 +25,9 @@ internal actual class NativeAudioRecorder(
 ) {
     private var speechRecognizer: SpeechRecognizer? = null
 
+    /**
+     * A flow emitting voice transcription states.
+     */
     actual val transcriptionFlow: Flow<TranscriptionState> =
         callbackFlow {
             if (!SpeechRecognizer.isRecognitionAvailable(context)) {
@@ -98,6 +101,9 @@ internal actual class NativeAudioRecorder(
             }
         }
 
+    /**
+     * Stops the audio recording.
+     */
     actual fun stop() {
         speechRecognizer?.stopListening()
     }

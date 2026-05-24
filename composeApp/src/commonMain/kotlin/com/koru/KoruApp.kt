@@ -12,7 +12,7 @@ import com.koru.presentation.screens.HomeScreen
  * (ComposeUIViewController). This keeps the theming contract in
  * [commonMain] and avoids any platform-specific divergence.
  */
-@Suppress("FunctionName")
+@Suppress("ktlint:standard:function-naming")
 @Composable
 fun KoruApp() {
     MaterialTheme {

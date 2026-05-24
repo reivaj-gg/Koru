@@ -15,7 +15,5 @@ internal class VoiceCaptureRepositoryImpl(
 ) : VoiceCaptureRepository {
     override fun startCapture(): Flow<TranscriptionState> = nativeRecorder.transcriptionFlow
 
-    override fun stopCapture() {
-        nativeRecorder.stop()
-    }
+    override fun stopCapture() = nativeRecorder.stop()
 }

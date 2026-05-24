@@ -39,7 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
  * an optimized Canvas to avoid recompositions. All hit-testing is delegated
  * mathematically to [TreeLayoutCalculator].
  */
-@Suppress("FunctionName")
+@Suppress("ktlint:standard:function-naming")
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
@@ -96,7 +96,7 @@ fun HomeScreen(
  * Internal component isolating Canvas rendering to maximize performance
  * and minimize state reads that cause jank.
  */
-@Suppress("FunctionName")
+@Suppress("ktlint:standard:function-naming")
 @Composable
 private fun TreeCanvas(
     nodes: List<VisualNode>,
