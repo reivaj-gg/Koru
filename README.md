@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 > **KMP Contest Starter Kit 2026 Submission**
-> This repository is a fully-featured, production-ready sample application designed as a **Starter Kit** for the KMP Contest. It demonstrates an Offline-First architecture, custom Canvas UI, native platform APIs, and AI integrations.
+> This repository serves as a robust Starter Kit for the KMP Contest. It demonstrates an Offline-First architecture, custom Canvas UI, native platform APIs, and AI integrations.
 
 ---
 ## 📸 Interface Preview & Tactical Analysis
@@ -105,10 +105,12 @@ To evaluate the technical depth of this project, we recommend the following flow
  3. **Test Offline Capabilities:** Disable your internet connection. Search through your traces; observe the SQLDelight FTS5 engine querying records instantly without network access.
  4. **Export Data:** Navigate to settings and trigger a PDF export, validating the native expect/actual interop bridge.
 ## 📚 Educational Material & Blog Posts
+
 As part of the Contest Starter Kit initiative, this repository is accompanied by a planned series of technical deep-dives to be published on the Kotlin Foundation Blog and LinkedIn:
- 1. *MVI & Canvas in Compose Multiplatform: Rendering 120fps Trees without Recomposition.*
- 2. *Building an Offline-First KMP App with SQLDelight and FTS5.*
- 3. *Native Audio Interop: Bridging iOS and Android hardware in commonMain.*
+
+1. **MVI & Canvas in Compose Multiplatform:** Rendering 120fps Trees without Recomposition.
+2. **Building an Offline-First KMP App:** Seamless synchronization with SQLDelight and FTS5.
+3. **Native Audio Interop:** Bridging iOS and Android hardware via `expect/actual` in commonMain.
 ## 📄 License
 This project is open-sourced and distributed under the **MIT License**. 
 
