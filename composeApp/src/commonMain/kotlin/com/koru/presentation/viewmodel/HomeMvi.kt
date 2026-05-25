@@ -12,6 +12,7 @@ import com.koru.presentation.utils.BezierCurve
  *
  * @property nodes Immutable list of mathematically processed nodes ready to be drawn.
  * @property branches Immutable list of calculated Bézier curves connecting the nodes.
+ * @property latestInsight The most recently generated AI insight, if any.
  * @property isLoading Indicates if the tree is currently loading or analyzing data.
  * @property error Error message to display if data loading fails.
  */
