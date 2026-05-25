@@ -5,7 +5,6 @@ package com.koru.domain.usecase
 import com.koru.domain.model.EmotionTag
 import com.koru.domain.model.Trace
 import com.koru.domain.repository.TraceRepository
-import kotlin.time.Clock
 
 /**
  * Validates and persists a new [Trace] to the local store.
@@ -23,7 +22,6 @@ import kotlin.time.Clock
 class SaveTraceUseCase(
     private val repository: TraceRepository,
 ) {
-
     /**
      * Creates and saves a trace with the given parameters.
      *
@@ -44,15 +42,16 @@ class SaveTraceUseCase(
             )
         }
 
-        val now = Clock.System.now()
+        val now = kotlinx.datetime.Instant.fromEpochMilliseconds(com.koru.domain.utils.currentEpochMillis())
 
-        val trace = Trace(
-            id = generateId(now.toEpochMilliseconds()),
-            content = content.trim(),
-            context = context?.trim()?.takeIf { it.isNotBlank() },
-            capturedAt = now,
-            emotionTag = emotionTag,
-        )
+        val trace =
+            Trace(
+                id = generateId(now.toEpochMilliseconds()),
+                content = content.trim(),
+                context = context?.trim()?.takeIf { it.isNotBlank() },
+                capturedAt = now,
+                emotionTag = emotionTag,
+            )
 
         return repository.save(trace)
     }
