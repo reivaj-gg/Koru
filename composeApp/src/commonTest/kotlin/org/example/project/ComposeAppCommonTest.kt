@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 class ComposeAppCommonTest {
     @Test
-    fun `given default state, when addition called, then returns three`() {
+    fun `given default state when addition called then returns three`() {
         assertEquals(3, 1 + 2)
     }
 }
