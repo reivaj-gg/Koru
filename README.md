@@ -7,6 +7,9 @@
 [![AGP](https://img.shields.io/badge/AGP-9.0+-3DDC84.svg?logo=android)](https://developer.android.com/studio/releases/gradle-plugin)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+## 🧠 What is Koru? (The Application Context)
+Unlike standard journaling apps, **Koru** captures *how you react to the world* and uses AI to detect your thought patterns over time. Built on the **90/10 Principle** (10% is the event, 90% is the meaning we give it), Koru creates a luminous "Tree of Thoughts" rendered via a high-performance **Decoupled Canvas**. Every node is a recorded moment, and every branch represents a cognitive pattern.
+
 > **KMP Contest Starter Kit 2026 Submission**
 > This repository serves as a robust Starter Kit for the KMP Contest. It demonstrates an Offline-First architecture, custom Canvas UI, native platform APIs, and AI integrations.
 
@@ -65,10 +68,30 @@ This codebase was meticulously designed to serve as an ultimate starting point f
 * **`AGENTS.md` Protocol:** A specialized directive file in the root directory instructing AI coding agents (Cursor, Claude Code) on architectural boundaries, MVI patterns, and code generation rules.
 * **`/SKILLS/` Directory:** Contextual prompts to support agent-driven build and test workflows.
 
----
+## 🤖 AI-Ready & Spec-Driven Development (SDD)
 
-## 🧠 What is Koru? (The Application Context)
-Unlike standard journaling apps, **Koru** captures *how you react to the world* and uses AI to detect your thought patterns over time. Built on the **90/10 Principle** (10% is the event, 90% is the meaning we give it), Koru creates a luminous "Tree of Thoughts" rendered via a high-performance **Decoupled Canvas**. Every node is a recorded moment, and every branch represents a cognitive pattern.
+This Starter Kit was not just "written" with AI; it was orchestrated using advanced agentic workflows. Built in alignment with the **Gentle-AI Stack** and **Engram** (persistent memory for AI agents), Koru demonstrates the future of software engineering: **Spec-Driven Development (SDD)**.
+
+Instead of relying on fragmented chat windows, the development of Koru followed a strict pipeline:
+1. **Spec First:** Every feature began as a PRD (Product Requirements Document) or technical specification. 
+2. **Agentic Implementation:** Sub-agents implemented the code based strictly on these specs, preventing hallucinations and ensuring architectural consistency.
+3. **Distilled Context:** Instead of sharing a noisy, raw AI chat history, the "brain" of this project has been distilled into a clean, modular format for future developers.
+
+### How to use the AI capabilities in this repository:
+To ensure this codebase is 100% **"AI-Ready"** for anyone (whether you use Claude Code, Cursor, Windsurf, or OpenCode), we have included:
+* **`AGENTS.md`:** The root instruction file. Point your AI agent here first to understand the project's philosophy, boundaries, and commands.
+* **`/SKILLS/` Directory:** A library of modular context files (e.g., `kmp-architecture.md`, `offline-first-sync.md`). If your agent needs to know how to implement a new Compose Canvas tree node or how our SQLDelight FTS5 sync works, instruct it to read the specific skill file first.
+
+By treating context as code, Koru ensures that your AI assistant acts as a Senior Developer who already knows the codebase, rather than a Junior who needs constant correcting.
+
+## 🛡️ Professional Engineering & Quality Assurance
+
+To ensure this Starter Kit meets the highest industry standards, the development lifecycle incorporates enterprise-grade quality assurance, strict conventions, and AI-assisted review mechanisms:
+
+*   **Gentleman Guardian Angel (GGA) & CI/CD:** We integrated GGA (an AI-powered code reviewer) directly into our Continuous Integration pipeline and pre-commit hooks. GGA automatically audits every commit and Pull Request against our architectural guidelines. It features an intelligent caching system that only analyzes modified files, optimizing token usage while strictly preventing regressions or architectural leaks.
+*   **Test-Driven Development (TDD) & Turbine:** All core logic, especially the `TreeLayoutCalculator` and MVI state contracts, was built using a strict TDD loop. We utilize `Turbine` for robust, deterministic testing of asynchronous `StateFlow` and Coroutines, eliminating flaky tests and ensuring reliable state management.
+*   **Strict Kotlin Conventions:** The codebase rigorously adheres to the official Kotlin Foundation Coding Conventions. This includes a strict preference for immutability (`val` and immutable collections everywhere), pure functions, mandatory KDoc documentation for all public APIs, and 4-space indentation enforced by automated `ktlint` checks.
+*   **Git Best Practices:** We maintain a pristine Git history utilizing Conventional Commits (e.g., `feat:`, `fix:`, `refactor:`). This structured approach to branching and commit messaging makes the repository's evolution transparent and easy to navigate for new contest participants.
 
 ---
 
