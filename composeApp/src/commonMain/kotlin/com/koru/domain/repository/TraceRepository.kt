@@ -4,33 +4,60 @@ import com.koru.domain.model.Trace
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Single source of truth for Trace persistence and sync.
- * All data operations for traces must flow through this interface.
+ * Repository interface for managing user [Trace] records.
+ *
+ * Provides operations to read, write, and synchronize traces following an offline-first strategy.
+ * Implementations should ensure that local storage (e.g., SQLDelight) is the single source of truth.
  */
 interface TraceRepository {
     /**
-     * Observes all traces in descending chronological order.
-     * Emits a new list whenever the underlying data changes.
+     * Observes all traces from the local database as a reactive stream.
+     *
+     * @return A [Flow] emitting the complete list of [Trace] objects whenever the data changes.
      */
     fun observeAll(): Flow<List<Trace>>
-    
+
     /**
-     * Saves a trace locally (offline-first).
-     * The AI sync happens asynchronously downstream.
+     * Persists a single trace to the local database.
      *
-     * @param trace The trace to persist. [Trace.content] must not be blank.
-     * @return [Result.success] containing the saved trace ID on success,
-     *         or [Result.failure] with a DomainError on validation or storage failure.
+     * @param trace The trace entity to save.
+     * @return A [Result.success] containing the trace ID, or [Result.failure] on error.
      */
     suspend fun save(trace: Trace): Result<String>
-    
+
     /**
-     * Performs a local Full-Text Search on trace content.
-     * Required as a pre-filter before any AI contextual insight.
+     * Performs a full-text search across trace contents.
      *
-     * @param semanticQuery The search query to match against trace contents.
-     * @param limit Maximum number of traces to return.
-     * @return [Result.success] with the matching traces, or [Result.failure] on error.
+     * @param semanticQuery The search terms to match against trace content.
+     * @param limit The maximum number of results to return (defaults to 20).
+     * @return A [Result.success] containing matching [Trace]s, or [Result.failure] on error.
      */
-    suspend fun search(semanticQuery: String, limit: Int = 20): Result<List<Trace>>
+    suspend fun search(
+        semanticQuery: String,
+        limit: Int = 20,
+    ): Result<List<Trace>>
+
+    /**
+     * Marks a trace as deleted logically without removing it from the database entirely,
+     * allowing for future synchronization of the deletion.
+     *
+     * @param traceId The unique identifier of the trace to delete.
+     * @return A [Result.success] on completion, or [Result.failure] on error.
+     */
+    suspend fun delete(traceId: String): Result<Unit>
+
+    /**
+     * Retrieves all traces that have not yet been synchronized with the remote server.
+     *
+     * @return A [Result.success] with the pending [Trace]s, or [Result.failure] on error.
+     */
+    suspend fun getPendingSyncs(): Result<List<Trace>>
+
+    /**
+     * Marks a specific trace as successfully synchronized.
+     *
+     * @param traceId The unique identifier of the synchronized trace.
+     * @return A [Result.success] on completion, or [Result.failure] on error.
+     */
+    suspend fun markAsSynced(traceId: String): Result<Unit>
 }

@@ -7,19 +7,25 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
+/**
+ * Main entry point for the Android application.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
-            App()
+            app()
         }
     }
 }
 
+/**
+ * Preview function for the Android application.
+ */
 @Preview
 @Composable
-fun AppAndroidPreview() {
-    App()
-}
+fun appAndroidPreview() {
+    app()
+}

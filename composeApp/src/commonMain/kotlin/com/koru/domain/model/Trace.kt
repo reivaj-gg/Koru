@@ -2,17 +2,26 @@
 
 package com.koru.domain.model
 
-import kotlin.time.Instant
+import kotlinx.datetime.Instant
 
 /**
  * Represents an emotional or cognitive tag attached to a trace.
  */
 enum class EmotionTag {
+    /** Feeling of tension or stress. */
     TENSION,
+
+    /** Feeling of surprise. */
     SURPRISE,
+
+    /** Feeling of clarity or understanding. */
     CLARITY,
+
+    /** Feeling of resistance or reluctance. */
     RESISTANCE,
-    GRATITUDE
+
+    /** Feeling of gratitude. */
+    GRATITUDE,
 }
 
 /**
@@ -28,9 +37,9 @@ enum class EmotionTag {
 data class Trace(
     val id: String,
     val content: String,
-    val context: String?,
+    val context: String? = null,
     val capturedAt: Instant,
-    val emotionTag: EmotionTag?,
+    val emotionTag: EmotionTag? = null,
 ) {
     init {
         require(id.isNotBlank()) { "Trace id must not be blank" }
